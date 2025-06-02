@@ -5,6 +5,13 @@
 
 const express = require("express");
 const router = express.Router();
+const userModel = require("./user.Model");
+
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://127.0.0.1:27017/backendRevisionDB")
+.then(() => console.log("MongoDB connected"))
+.catch(() => console.error("MongoDB connection failed"));
 
 router.use((req, res, next) => {
     console.log(`Router level middleware`);
@@ -14,8 +21,12 @@ router.use((req, res, next) => {
 const users = [{id:1, name:"Masai"}];
 
 // Endpoint - to get all the users
-router.get("/", (req, res) => {
-    res.json(users);
+router.get("/", async (req, res) => {
+
+    // res.json(users);
+
+    let allUsers = await userModel.find();
+    res.json(allUsers);
 })
 
 // Frontend = Postman (API testing tool)
